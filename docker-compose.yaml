@@ -28,5 +28,16 @@ services:
     networks:
       - proxy-net
 
+  # CentOS Verification Service
+  # Runs the static binary on CentOS 9
+  proxy-centos:
+    build:
+      context: .
+      dockerfile: Dockerfile.centos
+    ports:
+      - "8444:8443" # Listen on 8444 to avoid conflict
+    networks:
+      - proxy-net
+
 networks:
   proxy-net:

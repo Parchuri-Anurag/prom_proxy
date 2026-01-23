@@ -40,6 +40,7 @@ func NewProxyHandler(cfg *config.Config) http.Handler {
 			for key, value := range route.Headers {
 				req.Header.Set(key, value)
 			}
+			log.Printf("Proxying request: %s %s -> %s", req.Method, req.RemoteAddr, req.URL.String())
 		}
 
 		log.Printf("Registering route: %s -> %s", route.Path, route.Target)
