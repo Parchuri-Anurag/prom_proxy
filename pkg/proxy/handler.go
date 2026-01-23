@@ -35,6 +35,10 @@ func NewProxyHandler(cfg *config.Config) http.Handler {
 		proxy.Director = func(req *http.Request) {
 			originalDirector(req)
 			req.Host = targetURL.Host
+			// Strict Target Routing: Use the target's path exactly, ignoring the incoming request path.
+			// This prevents joining/appending.
+			req.URL.Path = targetURL.Path
+			req.URL.RawPath = targetURL.RawPath
 
 			// Inject generic headers from config
 			for key, value := range route.Headers {

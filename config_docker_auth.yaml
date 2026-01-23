@@ -4,6 +4,11 @@ server:
 
 routes:
   - path: "/metrics"
-    target: "https://upstream-app:9100"
+    target: "https://upstream-app:9100/metrics"
     headers:
       Authorization: "Basic YWRtaW46c2VjcmV0" # admin:secret
+
+  - path: "/custom"
+    target: "https://upstream-app:9100/metrics" # Reuse same backend for demo, but could be different IP
+    headers:
+      Authorization: "Basic YWRtaW46c2VjcmV0"
