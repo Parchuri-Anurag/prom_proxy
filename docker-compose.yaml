@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  # Node Exporter (HTTPS)
+  upstream-app:
+    image: quay.io/prometheus/node-exporter:latest
+    command:
+      - '--web.config.file=/etc/node_exporter/web-config.yml'
+    volumes:
+      - ./certs:/etc/node_exporter/certs
+      - ./web-config.yml:/etc/node_exporter/web-config.yml
+    ports:
+      - "9100:9100"
+    networks:
+      - proxy-net
+
+  # Insecure Proxy
+  # Proxies requests to upstream-app
+  proxy:
+    build:
+      context: .
+      target: proxy
+    ports:
+      - "8443:8443" # HTTPS Listener
+    volumes:
+      - ./config_docker.yaml:/app/config.yaml
+    command: [ "-config", "/app/config.yaml" ]
+    networks:
+      - proxy-net
+
+networks:
+  proxy-net:

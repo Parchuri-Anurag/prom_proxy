@@ -1,0 +1,8 @@
+server:
+  addr: ":8443"
+  tls: true
+  # No cert files provided, should auto-gen
+
+routes:
+  - path: "/hello"
+    target: "https://localhost:9443"

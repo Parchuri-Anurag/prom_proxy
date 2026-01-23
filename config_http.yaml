@@ -1,0 +1,7 @@
+server:
+  addr: ":8080"
+  tls: false
+
+routes:
+  - path: "/hello"
+    target: "https://localhost:9443"

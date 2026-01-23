@@ -1,0 +1,7 @@
+server:
+  addr: ":8443"
+  tls: true
+
+routes:
+  - path: "/metrics"
+    target: "https://10.136.21.11:9100"
