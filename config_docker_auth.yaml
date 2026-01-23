@@ -1,0 +1,9 @@
+server:
+  addr: ":8443"
+  tls: true
+
+routes:
+  - path: "/metrics"
+    target: "https://upstream-app:9100"
+    headers:
+      Authorization: "Basic YWRtaW46c2VjcmV0" # admin:secret

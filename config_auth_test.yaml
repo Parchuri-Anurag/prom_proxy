@@ -1,0 +1,14 @@
+server:
+  addr: ":8080"
+  tls: false
+
+routes:
+  - path: "/bearer"
+    target: "https://localhost:9443"
+    headers:
+      Authorization: "Bearer my-secret-token"
+
+  - path: "/basic"
+    target: "https://localhost:9443"
+    headers:
+      Authorization: "Basic YWRtaW46c2VjcmV0cGFzc3dvcmQ="

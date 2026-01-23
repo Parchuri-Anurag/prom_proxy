@@ -35,6 +35,11 @@ func NewProxyHandler(cfg *config.Config) http.Handler {
 		proxy.Director = func(req *http.Request) {
 			originalDirector(req)
 			req.Host = targetURL.Host
+
+			// Inject generic headers from config
+			for key, value := range route.Headers {
+				req.Header.Set(key, value)
+			}
 		}
 
 		log.Printf("Registering route: %s -> %s", route.Path, route.Target)

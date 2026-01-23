@@ -14,8 +14,9 @@ type ServerConfig struct {
 }
 
 type Route struct {
-	Path   string `yaml:"path"`
-	Target string `yaml:"target"`
+	Path    string            `yaml:"path"`
+	Target  string            `yaml:"target"`
+	Headers map[string]string `yaml:"headers"` // Generic headers to inject (e.g. Authorization)
 }
 
 type Config struct {

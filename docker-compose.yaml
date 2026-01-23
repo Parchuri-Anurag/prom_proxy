@@ -23,7 +23,7 @@ services:
     ports:
       - "8443:8443" # HTTPS Listener
     volumes:
-      - ./config_docker.yaml:/app/config.yaml
+      - ./config_docker_auth.yaml:/app/config.yaml
     command: [ "-config", "/app/config.yaml" ]
     networks:
       - proxy-net

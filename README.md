@@ -142,5 +142,39 @@ routes:
 ./proxy -config config_lan.yaml
 ```
 
-**Note:** The proxy works for **any** upstream target IP or hostname. Because it uses insecure transport, it ignores certificate validation failures even if the upstream IP doesn't match the upstream certificate's Subject Alternative Names (SANs).
+---
+
+---
+
+### 5. Custom Headers (Authorization etc.)
+
+**Scenario:** The upstream metrics endpoint requires specific headers, such as an `Authorization` token.
+
+`config_headers.yaml`:
+```yaml
+server:
+  addr: ":8443"
+  tls: true
+
+routes:
+  - path: "/secure-metrics"
+    target: "https://secure-upstream:9100"
+    headers:
+      Authorization: "Basic YWRtaW46c2VjcmV0" # injected into upstream request
+      X-Custom-Header: "foobar"
+```
+
+The proxy will automatically inject these headers into requests sent to the upstream.
+
+---
+
+### 6. Running on Linux (RHEL 8/9)
+
+To run on Linux, especially minimal environments like RHEL 8/9 or scratch containers, build a static binary:
+
+```bash
+./build_linux.sh
+```
+
+This produces `proxy-linux-amd64` which is a self-contained static binary.
 
