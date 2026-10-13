@@ -8,6 +8,7 @@ A lightweight, minimal dependency reverse proxy written in Go. It is designed to
 - **HTTPS Listener:** Proxies HTTPS requests to HTTPS targets.
 - **Auto-Cert:** Automatically generates valid self-signed certificates if no files are provided.
 - **Insecure Transport:** Ignores SSL certificate errors from upstream servers (useful for localhost/internal testing).
+- **Endpoint Discovery:** `GET /endpoints` lists every route configured on the proxy.
 - **Static binary:** Can be built as a single binary with no external dependencies.
 
 ## Build
@@ -36,6 +37,7 @@ The proxy is controlled by a YAML configuration file.
 | `server.tls` | Enable HTTPS listener | `false` |
 | `server.cert_file` | Path to PEM encoded certificate file (optional) | Empty (Auto-gen) |
 | `server.key_file` | Path to PEM encoded key file (optional) | Empty (Auto-gen) |
+| `server.endpoints_path` | Path that lists all configured routes (optional) | `/endpoints` |
 | `routes` | List of path mappings | **Required** |
 | `routes[].path` | The path prefix to match (e.g., `/metrics`) | |
 | `routes[].target` | The upstream URL to forward to (e.g., `https://localhost:9100/metrics`) | |
@@ -168,7 +170,38 @@ The proxy will automatically inject these headers into requests sent to the upst
 
 ---
 
-### 6. Running on Linux (RHEL 8/9)
+### 6. Listing Configured Endpoints
+
+**Scenario:** Each server runs the proxy with a different set of routes, and you want to see which endpoints a given server exposes.
+
+`config_endpoints.yaml`:
+```yaml
+server:
+  addr: ":8443"
+  tls: true
+  # endpoints_path: "/endpoints"  # Optional, this is the default
+
+routes:
+  - path: "/node"
+    target: "https://localhost:9100/metrics"
+  - path: "/opa"
+    target: "https://localhost:8181/metrics"
+```
+
+**Test:**
+```bash
+curl -k https://localhost:8443/endpoints
+```
+
+```json
+{"endpoints":["/node","/opa"]}
+```
+
+Every route in the config is listed, in config order, however many there are. Only paths are returned; targets and headers are never exposed. Routes whose target URL fails to parse are skipped, matching what the proxy actually serves. If a route is itself configured on `/endpoints`, that route wins and the list is not served; set `endpoints_path` to move it.
+
+---
+
+### 7. Running on Linux (RHEL 8/9)
 
 To run on Linux, especially minimal environments like RHEL 8/9 or scratch containers, build a static binary:
 

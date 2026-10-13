@@ -11,6 +11,8 @@ type ServerConfig struct {
 	TLS      bool   `yaml:"tls"`
 	CertFile string `yaml:"cert_file"` // Optional: Path to cert. If empty, auto-generate.
 	KeyFile  string `yaml:"key_file"`  // Optional: Path to key.
+
+	EndpointsPath string `yaml:"endpoints_path"` // Optional: Path that lists configured routes. Defaults to /endpoints.
 }
 
 type Route struct {
